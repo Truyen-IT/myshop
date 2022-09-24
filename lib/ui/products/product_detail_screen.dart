@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
-
+//trang chi tiet
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen(
     this.product,

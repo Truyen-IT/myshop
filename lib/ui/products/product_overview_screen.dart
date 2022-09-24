@@ -3,11 +3,11 @@ import 'products_grid.dart';
 enum FitterOptions{ favorites ,all}
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({super.key});
-
+//co dinh toi product_grid dart
   @override
   State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
 }
-
+//trang chu
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavotites =false;
   @override
@@ -20,11 +20,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         buildProductFilterMenu()
        ],
       ),
-      body: ProductsGrid(_showOnlyFavotites),
+      body: ProductsGrid(_showOnlyFavotites),//day la ham hien thi productGrid
     );
     
   }
-  Widget buildShoppingCartIcon(){
+  
+  
+  Widget buildShoppingCartIcon(){//lam cai ham icon
     return IconButton(
       icon: const Icon(
         Icons.shopping_cart,
@@ -35,7 +37,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       },
     );
   }
-  Widget buildProductFilterMenu(){
+ 
+ 
+ 
+  Widget buildProductFilterMenu(){//lam cai ham cho menu
     return PopupMenuButton(
       onSelected: (FitterOptions selectedValue){
         setState(() {

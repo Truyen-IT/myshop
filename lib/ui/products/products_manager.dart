@@ -1,7 +1,7 @@
 import '../../models/product.dart';
 
 class ProductManager{
- final List<Product> _items = [
+ final List<Product> _items = [//danh sach<so san pham>  item la a[4];
     Product(
       id: 'p1',
       title: 'Red Shirt',
