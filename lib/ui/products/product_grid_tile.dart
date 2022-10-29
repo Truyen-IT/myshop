@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
+import '../cart/cart_manager.dart';
 import 'product_detail_screen.dart';
 class ProductGriTile extends StatelessWidget {
   const ProductGriTile(
@@ -37,16 +39,28 @@ class ProductGriTile extends StatelessWidget {
 Widget buildGridFooterBar(BuildContext context){
   return GridTileBar(
     backgroundColor: Colors.black87,
-    leading: IconButton(
-      icon:Icon(
-        product.isFavorite ? Icons.favorite : Icons.favorite_border,
-        ),
+    // leading: IconButton(
+    //   icon:Icon(
+    //     product.isFavorite ? Icons.favorite : Icons.favorite_border,
+    //     ),
+    leading: ValueListenableBuilder<bool>(
+       valueListenable: product.isFavoriteListenable,
+       builder: (ctx, isFavorite, child) {
+         return IconButton(
+           icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+    ),
 
    
+    
+    
      color:Theme.of(context).colorScheme.secondary,
      onPressed: (){
-      print('tongo a favirite product');
+      product.isFavorite = !isFavorite;
+
      },
+         );
+       },
      ),
     title:Text(
       product.title,
@@ -56,7 +70,25 @@ Widget buildGridFooterBar(BuildContext context){
     Icons.shopping_cart,
   ),
   onPressed: (){
-    print('add item cart');
+   final cart = context.read<CartManager>();
+   cart.addItem(product);
+   ScaffoldMessenger.of(context)
+     ..hideCurrentSnackBar()
+     ..showSnackBar(
+       SnackBar(
+         content: const Text(
+           'Item added to cart',
+         ),
+       duration: const Duration(seconds: 2),
+       action: SnackBarAction(
+        label: 'UNDO',
+       onPressed: () {
+        cart.removeSingleItem(product.id!);
+      },
+   ),
+ ),
+ );
+
 
   },
   color: Theme.of(context).colorScheme.secondary,

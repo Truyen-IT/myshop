@@ -1,8 +1,12 @@
+
+
 import 'package:flutter/material.dart';
+import 'edit_product_screen.dart';
 import 'user_product_list_tile.dart';
 import 'products_manager.dart';//hinh anh
 import '../shared/app_drawer.dart';
-
+import 'package:provider/provider.dart';
+//import 'products_manager.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';
@@ -15,7 +19,7 @@ class UserProductsScreen extends StatelessWidget {
       appBar:AppBar(
         title:const Text('Your Products'),
         actions:<Widget> [
-          buildAddButton(),
+          buildAddButton(context),
         ],
 
       ),
@@ -23,31 +27,38 @@ class UserProductsScreen extends StatelessWidget {
 
       body:RefreshIndicator(
         onRefresh: ()async =>print('refreash product'),
-        child: buidUserProductListView(productManager),
+        child: buidUserProductListView(),//productManager
       ),
     );
 
 
   }
-  Widget buidUserProductListView(ProductsManager productManager){
-    return ListView.builder(
-      itemCount: productManager.itemCount,
+  Widget buidUserProductListView(){
+    return Consumer<ProductsManager>(
+    builder: (ctx, productsManager, child) {
+     return ListView.builder(
+      itemCount: productsManager.itemCount,
       itemBuilder:(ctx,i)=>Column(
         children: [
           UserProductListTile(
-            productManager.items[i],
+            productsManager.items[i],
           ),
           const Divider(),
         ],
       ),
     );
+  },
+    );
   }
 
-  Widget buildAddButton(){
+  Widget buildAddButton(BuildContext context){
     return IconButton(
       icon:const Icon(Icons.add),
       onPressed: (){
-        print('go to edit product sreen');
+       Navigator.of(context).pushNamed(
+       EditProductScreen.routeName,
+);
+
       },
     );
   }
