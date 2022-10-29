@@ -9,7 +9,7 @@ class ProductsGrid extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    final productsManager = ProductManager();//day la ham productmagager
+    final productsManager = ProductsManager();//day la ham productmagager
     final products=
      showFavorites ? productsManager.favoriteItems :productsManager.items;
     return GridView.builder(
