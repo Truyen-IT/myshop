@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:myshop/ui/cart/cart_screen.dart';
+import 'package:myshop/ui/products/products_manager.dart';
 import 'package:provider/provider.dart';
 import 'products_grid.dart';
 import '../shared/app_drawer.dart';
 import '../cart/cart_manager.dart';
 import 'top_right_badge.dart';
 
-enum FitterOptions{ favorites ,all}
+enum FilterOptions{ favorites ,all}
 class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({super.key});
 //co dinh toi product_grid dart
@@ -14,8 +15,17 @@ class ProductsOverviewScreen extends StatefulWidget {
   State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
 }
 //trang chu
+
+
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  var _showOnlyFavotites =false;
+  // var _showOnlyFavotites =false;
+  final _showOnlyFavorites = ValueNotifier<bool>(false);
+  late Future<void> _fetchProducts;
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts = context.read<ProductsManager>().fetchProducts();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,10 +37,30 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
        ],
       ),
       drawer: const AppDrawer(),
-      body: ProductsGrid(_showOnlyFavotites),//day la ham hien thi productGrid
+      body: FutureBuilder(
+        future: _fetchProducts,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ValueListenableBuilder<bool>(
+              valueListenable: _showOnlyFavorites,
+              builder: (context, onlyFavorites, child) {
+                return ProductsGrid(onlyFavorites);
+              },
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
-    
   }
+
+
+  //     body: ProductsGrid(_showOnlyFavotites),//day la ham hien thi productGrid
+  //   );
+    
+  // }
   
   
   Widget buildShoppingCartIcon(){//lam cai ham icon
@@ -59,39 +89,64 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   
  
 }
- 
-  Widget buildProductFilterMenu(){//lam cai ham cho menu
+Widget buildProductFilterMenu() {
     return PopupMenuButton(
-      onSelected: (FitterOptions selectedValue){
-        setState(() {
-          if(selectedValue== FitterOptions.favorites){
-            _showOnlyFavotites=true;
+      onSelected: (FilterOptions selectedValue) {
+        if (selectedValue == FilterOptions.favorites) {
+            _showOnlyFavorites.value = true;
           } else {
-             _showOnlyFavotites=false;
-
-          }      
-         });
+            _showOnlyFavorites.value = false;
+          }
       },
-    icon:const Icon(
-      Icons.more_vert,
-    ),
-    itemBuilder: (ctx) =>[
-      const PopupMenuItem(
-        value: FitterOptions.favorites,
-        child: Text('only favorites'),
+      icon: const Icon(
+        Icons.more_vert,
       ),
-      const PopupMenuItem(
-        value: FitterOptions.all,
-        child: Text('Show All'),
-      ),
-    ],
+      itemBuilder: (ctx) => [
+        const PopupMenuItem(
+          value: FilterOptions.favorites,
+          child: Text('Only Favorites'),
+        ),
+        const PopupMenuItem(
+          value: FilterOptions.all,
+          child: Text('Show all'),
+        ),
+      ],
     );
   }
-
-
-
-
-
-
-
 }
+ 
+//   Widget buildProductFilterMenu(){//lam cai ham cho menu
+//     return PopupMenuButton(
+//       onSelected: (FitterOptions selectedValue){
+//         setState(() {
+//           if(selectedValue== FitterOptions.favorites){
+//             _showOnlyFavotites=true;
+//           } else {
+//              _showOnlyFavotites=false;
+
+//           }      
+//          });
+//       },
+//     icon:const Icon(
+//       Icons.more_vert,
+//     ),
+//     itemBuilder: (ctx) =>[
+//       const PopupMenuItem(
+//         value: FitterOptions.favorites,
+//         child: Text('only favorites'),
+//       ),
+//       const PopupMenuItem(
+//         value: FitterOptions.all,
+//         child: Text('Show All'),
+//       ),
+//     ],
+//     );
+//   }
+
+
+
+
+
+
+
+// }
