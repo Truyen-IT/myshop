@@ -40,6 +40,7 @@ class AuthService {
       }
 
       final authToken = _fromJson(responseJson);
+     
       _saveAuthToken(authToken);
 
       return authToken;

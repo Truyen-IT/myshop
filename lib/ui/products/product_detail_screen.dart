@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
+
 //trang chi tiet
 class ProductDetailScreen extends StatelessWidget {
   static const routeName = '/product-detail';
-  
-  const ProductDetailScreen(
-    this.product,
-    {super.key}) ;
-final Product product;
+
+  const ProductDetailScreen(this.product, {super.key});
+  final Product product;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(product.title),//tieu de cua tung san pham
-      ),
-      body:SingleChildScrollView(//khi màn hình tràn thì sẽ có chức năng kéo
-        child: Column(//xắp xếp từ trên xuống
-          children: <Widget>[
+        appBar: AppBar(
+          title: Text(product.title), //tieu de cua tung san pham
+        ),
+        body: SingleChildScrollView(
+          //khi màn hình tràn thì sẽ có chức năng kéo
+          child: Column(//xắp xếp từ trên xuống
+              children: <Widget>[
             SizedBox(
               height: 300,
               width: double.infinity,
@@ -27,8 +27,9 @@ final Product product;
             ),
             const SizedBox(height: 10),
             Text(
-              '\$${product.price}',//hiển thi chư
-              style: const TextStyle(//thuôc tính của text
+              '\$${product.price}', //hiển thi chư
+              style: const TextStyle(
+                //thuôc tính của text
                 color: Colors.grey,
                 fontSize: 20,
               ),
@@ -43,14 +44,8 @@ final Product product;
                 softWrap: true,
               ),
             ),
-
-          ]//nó bao tất cả và nằm từ trên xuống
-          ),
-
-      )
-
-
-    );
-    
+          ] //nó bao tất cả và nằm từ trên xuống
+              ),
+        ));
   }
 }

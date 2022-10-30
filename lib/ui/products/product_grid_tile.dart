@@ -27,12 +27,21 @@ class ProductGriTile extends StatelessWidget {
             );
            
           },
+           child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ProductDetailScreen(product),
+                ),
+              );
+            },
           child:Image.network(
             product.imageUrl,
             fit:BoxFit.cover,
-          )
+          ),
         ),
        ),
+    ),
     );
     
   }

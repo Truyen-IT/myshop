@@ -1,33 +1,30 @@
-
-
 import 'package:flutter/material.dart';
-import 'edit_product_screen.dart';
-import 'user_product_list_tile.dart';
-import 'products_manager.dart';//hinh anh
-import '../shared/app_drawer.dart';
 import 'package:provider/provider.dart';
-//import 'products_manager.dart';
+import 'user_product_list_tile.dart';
+import 'products_manager.dart';
+import '../shared/app_drawer.dart';
+import 'products_manager.dart';
+import 'edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
-  static const routeName = '/user-products';
+  static const routeName = '/user-products';//user-products
   const UserProductsScreen({super.key});
-   Future<void> _refreshProducts(BuildContext context) async {
+  Future<void> _refreshProducts(BuildContext context) async {
     await context.read<ProductsManager>().fetchProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-   // final productManager=ProductsManager();//lay hinh anh va chu
+    final productsManager = ProductsManager();
     return Scaffold(
-      appBar:AppBar(
-        title:const Text('Your Products'),
-        actions:<Widget> [
-          buildAddButton(context),
-        ],
-
-      ),
-      drawer: const AppDrawer(),
-      body: FutureBuilder(
+        appBar: AppBar(
+          title: const Text('Your Products'),
+          actions: <Widget>[
+            buildAddButton(context),
+          ],
+        ),
+        drawer: const AppDrawer(),
+        body: FutureBuilder(
           future: _refreshProducts(context),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -37,54 +34,38 @@ class UserProductsScreen extends StatelessWidget {
             }
             return RefreshIndicator(
               onRefresh: () => _refreshProducts(context),
-              child: buidUserProductListView(),
+              child: buildUserProductListView(),
             );
           },
         ));
   }
 
-
-  
-  
-  
-  
-  
-  //     body:RefreshIndicator(
-  //       onRefresh: ()async =>print('refreash product'),
-  //       child: buidUserProductListView(),//productManager
-  //     ),
-  //   );
-
-
-  // }
-  Widget buidUserProductListView(){
+  Widget buildUserProductListView() {
     return Consumer<ProductsManager>(
-    builder: (ctx, productsManager, child) {
-     return ListView.builder(
-      itemCount: productsManager.itemCount,
-      itemBuilder:(ctx,i)=>Column(
-        children: [
-          UserProductListTile(
-            productsManager.items[i],
+      builder: (ctx, productsManager, child) {
+        return ListView.builder(
+          itemCount: productsManager.itemCount,
+          itemBuilder: (ctx, i) => Column(
+            children: [
+              UserProductListTile(
+                productsManager.items[i],
+              ),
+              const Divider(),
+            ],
           ),
-          const Divider(),
-        ],
-      ),
-    );
-  },
-    );
-  }
-
-  Widget buildAddButton(BuildContext context){
-    return IconButton(
-      icon:const Icon(Icons.add),
-      onPressed: (){
-       Navigator.of(context).pushNamed(
-       EditProductScreen.routeName,
-);
-
+        );
       },
     );
   }
 
+  Widget buildAddButton(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.add),
+      onPressed: () {
+        Navigator.of(context).pushNamed(
+          EditProductScreen.routeName,
+        );
+      },
+    );
+  }
 }
